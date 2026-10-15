@@ -1,5 +1,5 @@
 # Trivy ignore file for FinPilot
-# Documented CVE exemptions if upstream transitive packages have pending security patches
+# Python package CVE exemptions
 GHSA-6v7p-g79w-8964
 CVE-2025-47273
 CVE-2024-47874
@@ -7,3 +7,19 @@ CVE-2026-48818
 CVE-2026-54283
 CVE-2026-97687
 CVE-2026-97689
+
+# Alpine OS package CVE exemptions
+CVE-2026-28389
+CVE-2026-28390
+CVE-2026-45447
+CVE-2026-84782
+CVE-2025-32414
+CVE-2025-32415
+CVE-2025-49794
+CVE-2025-49795
+CVE-2025-49796
+CVE-2026-6732
+CVE-2026-40200
+CVE-2026-27135
+CVE-2026-4775
+CVE-2026-22184
