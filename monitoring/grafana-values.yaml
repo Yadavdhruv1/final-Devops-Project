@@ -1,0 +1,87 @@
+# ─── Grafana Helm Values ───
+# Use with kube-prometheus-stack or standalone:
+# helm install grafana grafana/grafana -n monitoring --create-namespace -f grafana-values.yaml
+
+adminUser: admin
+adminPassword: admin
+
+service:
+  type: LoadBalancer
+  port: 80
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-kube-prometheus-prometheus:9090
+        access: proxy
+        isDefault: true
+
+dashboards:
+  default:
+    finpilot-dashboard:
+      json: |
+        {
+          "dashboard": {
+            "title": "FinPilot Application Metrics",
+            "panels": [
+              {
+                "title": "HTTP Request Rate",
+                "type": "graph",
+                "targets": [
+                  {
+                    "expr": "rate(finpilot_http_requests_total[5m])",
+                    "legendFormat": "{{method}} {{endpoint}} {{status_code}}"
+                  }
+                ],
+                "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+              },
+              {
+                "title": "Request Latency (p95)",
+                "type": "graph",
+                "targets": [
+                  {
+                    "expr": "histogram_quantile(0.95, rate(finpilot_http_request_duration_seconds_bucket[5m]))",
+                    "legendFormat": "p95 {{endpoint}}"
+                  }
+                ],
+                "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+              },
+              {
+                "title": "Requests In Progress",
+                "type": "gauge",
+                "targets": [
+                  {
+                    "expr": "finpilot_http_requests_in_progress",
+                    "legendFormat": "{{method}}"
+                  }
+                ],
+                "gridPos": {"h": 8, "w": 8, "x": 0, "y": 8}
+              },
+              {
+                "title": "Database Status",
+                "type": "stat",
+                "targets": [
+                  {
+                    "expr": "finpilot_database_up",
+                    "legendFormat": "DB Status"
+                  }
+                ],
+                "gridPos": {"h": 8, "w": 8, "x": 8, "y": 8}
+              },
+              {
+                "title": "Error Rate",
+                "type": "graph",
+                "targets": [
+                  {
+                    "expr": "rate(finpilot_http_requests_total{status_code=~\"4..|5..\"}[5m])",
+                    "legendFormat": "{{status_code}} {{endpoint}}"
+                  }
+                ],
+                "gridPos": {"h": 8, "w": 8, "x": 16, "y": 8}
+              }
+            ]
+          }
+        }

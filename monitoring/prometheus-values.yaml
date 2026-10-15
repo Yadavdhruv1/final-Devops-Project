@@ -1,0 +1,44 @@
+# ─── Prometheus Helm Values ───
+# Install: helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --create-namespace -f prometheus-values.yaml
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    additionalScrapeConfigs:
+      - job_name: "finpilot-backend"
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - finpilot
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            regex: finpilot-backend
+            action: keep
+          - source_labels: [__meta_kubernetes_endpoint_port_name]
+            regex: http
+            action: keep
+        metrics_path: /metrics
+        scrape_interval: 15s
+
+alertmanager:
+  enabled: false
+
+grafana:
+  enabled: true
+  adminPassword: admin
+  service:
+    type: LoadBalancer
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: "default"
+          orgId: 1
+          folder: ""
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
