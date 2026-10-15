@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: finpilot-frontend
+  labels:
+    {{- include "finpilot.frontend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.frontend.service.type }}
+  selector:
+    app: finpilot-frontend
+  ports:
+    - port: {{ .Values.frontend.service.port }}
+      targetPort: 3000
+      protocol: TCP
+      name: http
