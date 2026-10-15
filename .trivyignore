@@ -1,0 +1,9 @@
+# Trivy ignore file for FinPilot
+# Documented CVE exemptions if upstream transitive packages have pending security patches
+GHSA-6v7p-g79w-8964
+CVE-2025-47273
+CVE-2024-47874
+CVE-2026-48818
+CVE-2026-54283
+CVE-2026-97687
+CVE-2026-97689

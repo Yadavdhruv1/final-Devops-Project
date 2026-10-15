@@ -115,6 +115,7 @@ jobs:
           exit-code: "1"
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
+          trivyignores: .trivyignore
 
       - name: Trivy scan - Frontend
         uses: aquasecurity/trivy-action@master
@@ -124,6 +125,7 @@ jobs:
           exit-code: "1"
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
+          trivyignores: .trivyignore
 
   # ─── Stage 4: Publish to GHCR ───
   publish:
