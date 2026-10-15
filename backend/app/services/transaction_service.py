@@ -4,7 +4,7 @@ FinPilot Backend - Transaction Service Layer
 from datetime import date
 from typing import Optional, List, Tuple
 from sqlalchemy.orm import Session
-from sqlalchemy import func, extract
+from sqlalchemy import func, extract, case
 from app.models import Transaction, TransactionType, Category
 
 
@@ -153,13 +153,13 @@ def get_monthly_trend(db: Session, limit: int = 6) -> list:
             extract("month", Transaction.date).label("month"),
             extract("year", Transaction.date).label("year"),
             func.sum(
-                func.case(
+                case(
                     (Transaction.type == TransactionType.INCOME, Transaction.amount),
                     else_=0
                 )
             ).label("total_income"),
             func.sum(
-                func.case(
+                case(
                     (Transaction.type == TransactionType.EXPENSE, Transaction.amount),
                     else_=0
                 )
