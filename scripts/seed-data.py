@@ -92,11 +92,11 @@ def seed():
         db.add_all(budgets)
         db.commit()
 
-        print(f"✅ Seeded {len(transactions)} transactions and {len(budgets)} budgets")
+        print(f"[OK] Seeded {len(transactions)} transactions and {len(budgets)} budgets successfully")
 
     except Exception as e:
         db.rollback()
-        print(f"❌ Seed failed: {e}")
+        print(f"[ERROR] Seed failed: {e}")
     finally:
         db.close()
 

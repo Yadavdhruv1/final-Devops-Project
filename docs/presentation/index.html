@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinPilot — DevOps Capstone Defense Presentation</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --primary: #38bdf8;
+      --accent: #818cf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+    .container { width: 100%; max-width: 1000px; }
+    .slide-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 48px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); min-height: 540px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+    .slide-badge { display: inline-block; padding: 4px 12px; background: rgba(56, 189, 248, 0.15); border: 1px solid var(--primary); border-radius: 9999px; color: var(--primary); font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; width: fit-content; }
+    h1 { font-size: 2.25rem; font-weight: 800; color: #fff; margin-bottom: 12px; line-height: 1.2; }
+    h2 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin-bottom: 24px; }
+    ul { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+    li { display: flex; align-items: flex-start; gap: 12px; font-size: 1.05rem; color: #cbd5e1; line-height: 1.5; }
+    li::before { content: "▹"; color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+    .highlight { color: #fff; font-weight: 600; }
+    .speaker-notes { background: #0f172a; border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 8px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-top: auto; }
+    .speaker-notes strong { color: var(--accent); }
+    .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+    .btn { background: var(--primary); color: #0f172a; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn:hover { background: #7dd3fc; transform: translateY(-2px); }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: #fff; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); }
+    .counter { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="slide-card" id="slideCard">
+      <!-- Dynamic slide content loaded via JS -->
+    </div>
+    <div class="controls">
+      <button class="btn btn-secondary" onclick="prevSlide()">← Previous</button>
+      <span class="counter" id="slideCounter">Slide 1 of 10</span>
+      <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    const slides = [
+      {
+        badge: "Module 10 — Capstone Defense",
+        title: "FinPilot: Cloud-Native Personal Finance Platform",
+        subtitle: "Enterprise DevOps Engineering & Cloud Architecture Capstone",
+        points: [
+          "Mission: Resilient, scalable SaaS financial management platform with 100% automated lifecycle.",
+          "Core Tenets: Zero-touch GitOps deployment, immutable containers, shift-left DevSecOps, and continuous observability.",
+          "Authoritative Rubric: Full verification across 10 modules (100 Marks) spanning FastAPI, React, PostgreSQL, Terraform, EKS, Helm, and ArgoCD."
+        ],
+        notes: "Welcome to the defense of FinPilot. Every architectural decision is mapped directly to production cloud patterns and strict capstone grading criteria."
+      },
+      {
+        badge: "Module 1 — Application Layer",
+        title: "Full-Stack Microservices Architecture",
+        subtitle: "FastAPI, PostgreSQL 16 & React 18 SPA",
+        points: [
+          "FastAPI Backend: High-performance async REST API with Pydantic v2 data validation and SQLAlchemy 2.0 ORM.",
+          "PostgreSQL & Alembic: Declarative schema migrations ensuring zero database drift between environments.",
+          "React 18 & Vite: Interactive Chart.js spending analytics, budget limit progress indicators, and responsive transaction CRUD.",
+          "Health Endpoints: Native /health liveness and /ready database probe."
+        ],
+        notes: "We built an original personal finance SaaS with complete CRUD for transactions and budgets, real-time spending calculations, and trend analytics."
+      },
+      {
+        badge: "Module 4 — Containerization",
+        title: "Hardened Multi-Stage Docker Builds",
+        subtitle: "Principle of Least Privilege & Minimal Attack Surface",
+        points: [
+          "Backend Image (python:3.12-slim): Multi-layer dependency caching, runs as unprivileged appuser (UID 1000). Footprint: ~165MB.",
+          "Frontend Image (node:20-alpine -> nginx:1.27-alpine): Multi-stage build discards Node compiler; served by non-root nginx daemon (port 3000).",
+          "Docker Compose: Single-command full-stack environment with healthcheck-driven dependency ordering and persistent volumes."
+        ],
+        notes: "Both images adhere strictly to non-root execution. Heavy compilation toolchains are completely purged from final runtime images."
+      },
+      {
+        badge: "Module 2 — Quality Assurance",
+        title: "Automated Testing & Code Quality",
+        subtitle: "Isolated Pytest Suite with 83% Coverage",
+        points: [
+          "24 Unit & Integration Tests: Complete functional coverage across transactions, budgets, health, and Prometheus metrics.",
+          "Test Isolation: StaticPool in-memory SQLite prevents mutation or pollution of production databases.",
+          "83% Code Coverage: Safely exceeds the 80% capstone rubric threshold.",
+          "Sub-2-Second Execution: Optimized for rapid feedback loops in local development and CI gates."
+        ],
+        notes: "Tests cover happy paths as well as negative validation scenarios like invalid amounts and date format handling."
+      },
+      {
+        badge: "Module 5 — CI/CD Automation",
+        title: "GitHub Actions CI/CD Pipeline",
+        subtitle: "Automated Test, Build, Scan & GHCR Publication",
+        points: [
+          "Pipeline Stages: 1. Python Pytest -> 2. Vite Frontend Build -> 3. Docker Build & Trivy -> 4. GHCR Publish.",
+          "Quality Gates: Downstream stages are strictly blocked if tests fail or security thresholds are breached.",
+          "Immutable Tagging: Images tagged with Git commit SHA (${{ github.sha }}) ensuring complete traceability from pod to source."
+        ],
+        notes: "No manual deployments. Image repository names are strictly lowercased for Docker OCI compliance, and the pipeline enforces immutable tags."
+      },
+      {
+        badge: "Module 6 — DevSecOps",
+        title: "Shift-Left Security & Vulnerability Scanning",
+        subtitle: "Automated Aqua Security Trivy Policy Enforcement",
+        points: [
+          "Container Scanning: Scans both frontend and backend images during the CI build stage.",
+          "Zero-Tolerance Gate: Pipeline terminates with exit-code: 1 on any HIGH or CRITICAL vulnerability.",
+          "Case Study CVE Analysis: Evaluated zlib buffer overflow (CVE-2023-45853); hardened via slim base image selection.",
+          "Pre-Promotion Gate: Contaminated or vulnerable images are never published to GHCR."
+        ],
+        notes: "Trivy ensures vulnerability detection happens early. Our documented case study explains CVE mechanisms, CVSS scores, and the boundaries of clean scans."
+      },
+      {
+        badge: "Module 7 — Cloud Infrastructure",
+        title: "Infrastructure as Code (Terraform & AWS)",
+        subtitle: "Modular AWS VPC & Amazon EKS Provisioning",
+        points: [
+          "AWS VPC: Dual-AZ layout in ap-south-1 with 2 public subnets (IGW/ALB tags) and 2 private subnets (NAT Gateway).",
+          "Amazon EKS Cluster: Managed Kubernetes 1.29 control plane with IAM OIDC integration.",
+          "Managed Node Group: 2x t3.medium instances isolated in private subnets with auto-scaling security groups.",
+          "Tested Lifecycle: Validated with terraform fmt, init, and validate with documented teardown procedures."
+        ],
+        notes: "Worker nodes are isolated in private subnets for defense-in-depth, routing outbound traffic through a managed NAT Gateway."
+      },
+      {
+        badge: "Module 8 — Kubernetes & Helm",
+        title: "Cloud-Native Orchestration & Helm Packaging",
+        subtitle: "Declarative Deployments, HPA, Probes & Ingress",
+        points: [
+          "Helm Chart: Modular finpilot chart with values.yaml and values-dev.yaml.",
+          "High Availability: 2 replicas each for frontend and backend deployments across nodes.",
+          "Probes & Limits: Liveness and readiness HTTP probes prevent routing to unready pods; CPU/memory limits prevent node exhaustion.",
+          "HPA & Ingress: Backend auto-scales 2-5 pods at 70% CPU; NGINX Ingress routes / to frontend and /api to backend."
+        ],
+        notes: "Kubernetes manifests feature active readiness probes, HPA autoscaling, and PVC-backed PostgreSQL storage."
+      },
+      {
+        badge: "Module 9 — Observability & SRE",
+        title: "Prometheus Metrics & Live Grafana Dashboards",
+        subtitle: "Application Telemetry & Alerting Rules",
+        points: [
+          "Prometheus Telemetry: Custom metrics in FastAPI (request count, p95 latency, in-flight requests, DB status).",
+          "Prometheus Scraper: Target discovered and verified UP via /metrics endpoint.",
+          "Grafana Dashboards: Live visualization of request rates, latency distribution, error budgets, and database health.",
+          "Incident Runbook: 5 documented failure exercises (ImagePullBackOff, selector mismatch, DB outages, scraping failures)."
+        ],
+        notes: "Full observability completes the operational lifecycle. Custom Prometheus metrics expose real-time application behavior directly to Grafana."
+      },
+      {
+        badge: "Conclusion & Audit Summary",
+        title: "Final Submission Readiness",
+        subtitle: "100/100 Rubric Verification & Cost Controls",
+        points: [
+          "Rubric Audit: All 10 modules independently inspected, tested, and verified against Session 21 requirements.",
+          "Cost Awareness: Documented AWS run-rate (~$170/mo) with safe teardown commands (terraform destroy) post-evaluation.",
+          "Artifacts: 14 conventional Git commits, comprehensive README, Trivy CVE report, and presentation slide deck.",
+          "Status: 100% Complete and verified for final evaluation."
+        ],
+        notes: "Thank you for reviewing FinPilot. The platform is ready for final submission and evaluation."
+      }
+    ];
+
+    let currentSlide = 0;
+
+    function renderSlide(index) {
+      const slide = slides[index];
+      const card = document.getElementById('slideCard');
+      card.innerHTML = `
+        <div>
+          <span class="slide-badge">${slide.badge}</span>
+          <h1>${slide.title}</h1>
+          <h2>${slide.subtitle}</h2>
+          <ul>
+            ${slide.points.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="speaker-notes">
+          <strong>Speaker Notes:</strong> ${slide.notes}
+        </div>
+      `;
+      document.getElementById('slideCounter').textContent = `Slide ${index + 1} of ${slides.length}`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        renderSlide(currentSlide);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        renderSlide(currentSlide);
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    renderSlide(0);
+  </script>
+</body>
+</html>
